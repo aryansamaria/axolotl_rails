@@ -1,29 +1,73 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Axolotl" %></title>
+    <title>Fintech Assistant</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= yield :head %>
-
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="bg-gray-50 min-h-screen">
+    <nav class="bg-indigo-600">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <%= link_to root_path do %>
+                <span class="text-white text-xl font-bold">Fintech Assistant</span>
+              <% end %>
+            </div>
+            <div class="hidden md:block">
+              <div class="ml-10 flex items-baseline space-x-4">
+                <%= link_to "Home", root_path, class: "text-white hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium" %>
+                <% if logged_in? %>
+                  <a href="#" class="text-white hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium">Voice Assistant</a>
+                  <a href="#" class="text-white hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium">Investments</a>
+                  <a href="#" class="text-white hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium">Banking</a>
+                  <a href="#" class="text-white hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium">Credit Score</a>
+                <% end %>
+              </div>
+            </div>
+          </div>
+          <div class="hidden md:block">
+            <div class="ml-4 flex items-center md:ml-6">
+              <% if logged_in? %>
+                <div class="relative">
+                  <div class="flex items-center">
+                    <span class="text-white mr-4"><%= current_user.name %></span>
+                    <%= button_to "Log Out", logout_path, method: :delete, class: "inline-flex items-center bg-indigo-700 border border-transparent px-3 py-2 text-sm font-medium leading-4 text-white rounded-md hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+                  </div>
+                </div>
+              <% else %>
+                <%= link_to "Log In", login_path, class: "text-white hover:text-indigo-200 px-3 py-2 rounded-md text-sm font-medium" %>
+                <%= link_to "Sign Up", signup_path, class: "bg-indigo-700 text-white hover:bg-indigo-800 px-3 py-2 rounded-md text-sm font-medium" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="py-4">
+      <% if notice %>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="bg-green-50 p-4 rounded-md mb-4">
+            <p class="text-green-800"><%= notice %></p>
+          </div>
+        </div>
+      <% end %>
+      
+      <% if alert %>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="bg-red-50 p-4 rounded-md mb-4">
+            <p class="text-red-800"><%= alert %></p>
+          </div>
+        </div>
+      <% end %>
+      
       <%= yield %>
     </main>
   </body>
